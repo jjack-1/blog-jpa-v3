@@ -10,6 +10,23 @@ import java.util.List;
 public class BoardResponse {
 
     @Data
+    public static class UpdateFormDTO {
+        private Integer id; // pk는 반드시 필요하다
+        private String title;
+        private String content;
+        private Boolean isPublic;
+//        private Integer userId; // 개인 식별키는 들고자봤자 의미 없다. (사용 불가) 이거 받아봐야 신뢰할 수 없다. 뿌리는건 가능
+//        private String createdAt;
+
+        public UpdateFormDTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.isPublic = board.getIsPublic();
+        }
+    }
+
+    @Data
     public static class DTO {
         private Integer id;
         private String title;
