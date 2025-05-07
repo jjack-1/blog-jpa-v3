@@ -1,12 +1,12 @@
 package shop.mtcoding.blog.board;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.util.Resp;
 import shop.mtcoding.blog.user.User;
 
 @CrossOrigin
@@ -16,67 +16,51 @@ public class BoardController {
     private final BoardService boardService;
     private final HttpSession session;
 
-    @PostMapping("/board/{id}/update")
-    public String update(@PathVariable("id") Integer id, @Valid BoardRequest.UpdateDTO reqDTO, Errors errors) {
+    @PutMapping("/board/{id}")
+    public @ResponseBody Resp<?> update(@PathVariable("id") Integer id, @Valid @RequestBody BoardRequest.UpdateDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         BoardResponse.DTO respDTO = boardService.글수정하기(reqDTO, id, sessionUser.getId());
 
-        return "redirect:/board/" + id;
+        return Resp.ok(respDTO);
     }
 
-    @GetMapping("/board/{id}/update-form")
-    public String updateForm(@PathVariable("id") int id, HttpServletRequest request) {
+    @GetMapping("/board/{id}") // 전달하는 데이터를 보고 주소를 설계함
+    public @ResponseBody Resp<?> getBoardOne(@PathVariable("id") int id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        BoardResponse.UpdateFormDTO respDTO = boardService.업데이트글보기(id, sessionUser.getId());
-        request.setAttribute("model", respDTO);
-        return "board/update-form";
+        BoardResponse.DTO respDTO = boardService.글보기(id, sessionUser.getId());
+        return Resp.ok(respDTO);
     }
 
-    @GetMapping("/v2/board/{id}")
-    public @ResponseBody BoardResponse.DetailDTO v2Detail(@PathVariable("id") Integer id) {
-
-        Integer sessionUserId = 1;
-        BoardResponse.DetailDTO detailDTO = boardService.글상세보기(id, sessionUserId);
-
-        return detailDTO;
-    }
-
-    @GetMapping("/board/{id}")
-    public String detail(@PathVariable("id") Integer id, HttpServletRequest request) {
+    @GetMapping("/board/{id}/detail") // 전달하는 데이터를 보고 주소를 설계함
+    public @ResponseBody Resp<?> getBoardDetail(@PathVariable("id") Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         Integer sessionUserId = (sessionUser == null ? null : sessionUser.getId());
         BoardResponse.DetailDTO detailDTO = boardService.글상세보기(id, sessionUserId);
-        request.setAttribute("model", detailDTO);
-        return "board/detail";
+        return Resp.ok(detailDTO);
     }
 
     // localhost:8080?page=0
     // localhost:8080
     @GetMapping("/")
-    public String list(HttpServletRequest request,
-                       @RequestParam(required = false, value = "page", defaultValue = "0") Integer page,
-                       @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
-        System.out.println("keyword : " + keyword);
+    public @ResponseBody Resp<?> list(@RequestParam(required = false, value = "page", defaultValue = "0") Integer page,
+                                      @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
         User sessionUser = (User) session.getAttribute("sessionUser");
+
+        BoardResponse.ListDTO respDTO;
 
         if (sessionUser == null) {
-            request.setAttribute("model", boardService.글목록보기(null, page, keyword));
+            respDTO = boardService.글목록보기(null, page, keyword);
         } else {
-            request.setAttribute("model", boardService.글목록보기(sessionUser.getId(), page, keyword));
+            respDTO = boardService.글목록보기(sessionUser.getId(), page, keyword);
         }
 
-        return "board/list";
+        return Resp.ok(respDTO);
     }
 
-    @PostMapping("/board/save")
-    public String save(@Valid BoardRequest.SaveDTO reqDTO, Errors errors) {
+    @PostMapping("/board")
+    public @ResponseBody Resp<?> save(@Valid @RequestBody BoardRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         BoardResponse.DTO respDTO = boardService.글쓰기(reqDTO, sessionUser);
-        return "redirect:/";
-    }
-
-    @GetMapping("/board/save-form")
-    public String saveForm() {
-        return "board/save-form";
+        return Resp.ok(respDTO);
     }
 }

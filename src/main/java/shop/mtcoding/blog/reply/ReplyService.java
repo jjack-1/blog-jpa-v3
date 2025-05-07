@@ -19,8 +19,9 @@ public class ReplyService {
     }
 
     // TODO -> 2단계 RestAPI 주소 변경 json 돌려주기할때 void로 변경하기
+    // 규칙 5 -> 삭제는 응답할 데이터가 없다. void를 사용한다
     @Transactional
-    public Integer 댓글삭제(Integer id, Integer sessionUserId) {
+    public void 댓글삭제(Integer id, Integer sessionUserId) {
         Reply replyPS = replyRepository.findById(id);
 
         // Exception404
@@ -30,10 +31,6 @@ public class ReplyService {
             throw new Exception403("권한이 없습니다");
         }
 
-        int boardId = replyPS.getBoard().getId();
-
         replyRepository.deleteById(id);
-
-        return boardId;
     }
 }

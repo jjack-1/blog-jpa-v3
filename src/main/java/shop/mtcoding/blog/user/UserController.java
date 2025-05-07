@@ -12,6 +12,8 @@ import shop.mtcoding.blog._core.util.Resp;
 
 import java.util.Map;
 
+
+// TODO -> return 미완성
 @RequiredArgsConstructor
 @Controller
 public class UserController {
@@ -20,10 +22,9 @@ public class UserController {
 
 
     // TODO -> JWT 이후에 하기
-    @PostMapping("/user/update")
-    public String update(@Valid UserRequest.UpdateDTO updateDTO, Errors errors) {
+    @PutMapping("/user") // 인증에 관련된 id 는 주소로 받는게 아닌 session 에서 가져온다
+    public String update(@Valid @RequestBody UserRequest.UpdateDTO updateDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        // update user_tb set password = ?, email = ? where id = ?
         User userPS = userService.회원정보수정(updateDTO, sessionUser.getId()); // 토큰도 새로 만들어 줘야 한다
         // 세션 동기화
         session.setAttribute("sessionUser", userPS);
@@ -44,8 +45,8 @@ public class UserController {
 
 
     // TODO -> JWT 이후에
-    @PostMapping("/login")
-    public String login(@Valid UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {
+    @PostMapping("/login") // password랑 id가 노출되면 안되기 때문에 post로 받는다
+    public String login(@Valid @RequestBody UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {
         //System.out.println(loginDTO);
         User sessionUser = userService.로그인(loginDTO);
         session.setAttribute("sessionUser", sessionUser);

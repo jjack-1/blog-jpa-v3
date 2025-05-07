@@ -10,6 +10,9 @@ public class Resp<T> {
     private String msg;
     private T body;
 
+    private Resp() {
+    } // 기본생성자를 막아서 setter를 사용못하게 한다
+
     public static <B> Resp<?> ok(B body) {
         return new Resp<>(200, "성공", body);
     }
