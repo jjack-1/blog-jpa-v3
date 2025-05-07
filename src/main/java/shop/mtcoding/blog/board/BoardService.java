@@ -7,7 +7,6 @@ import shop.mtcoding.blog._core.error.ex.Exception403;
 import shop.mtcoding.blog._core.error.ex.Exception404;
 import shop.mtcoding.blog.love.Love;
 import shop.mtcoding.blog.love.LoveRepository;
-import shop.mtcoding.blog.reply.ReplyRepository;
 import shop.mtcoding.blog.user.User;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final LoveRepository loveRepository;
-    private final ReplyRepository replyRepository;
 
     // TODO 과제1
     @Transactional
