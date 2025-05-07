@@ -22,7 +22,7 @@ public class UserController {
 
 
     // TODO -> JWT 이후에 하기
-    @PutMapping("/user") // 인증에 관련된 id 는 주소로 받는게 아닌 session 에서 가져온다
+    @PutMapping("/s/api/user") // 인증에 관련된 id 는 주소로 받는게 아닌 session 에서 가져온다
     public String update(@Valid @RequestBody UserRequest.UpdateDTO updateDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User userPS = userService.회원정보수정(updateDTO, sessionUser.getId()); // 토큰도 새로 만들어 줘야 한다
