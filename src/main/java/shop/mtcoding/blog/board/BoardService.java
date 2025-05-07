@@ -3,8 +3,9 @@ package shop.mtcoding.blog.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.mtcoding.blog._core.error.ex.Exception403;
 import shop.mtcoding.blog._core.error.ex.Exception404;
+import shop.mtcoding.blog._core.error.ex.ExceptionApi403;
+import shop.mtcoding.blog._core.error.ex.ExceptionApi404;
 import shop.mtcoding.blog.love.Love;
 import shop.mtcoding.blog.love.LoveRepository;
 import shop.mtcoding.blog.user.User;
@@ -24,7 +25,7 @@ public class BoardService {
                 .orElseThrow(() -> new Exception404("자원을 찾을 수 없습니다"));
 
         if (!boardPS.getUser().getId().equals(sessionUserId)) {
-            throw new Exception403("권한이 없습니다");
+            throw new ExceptionApi403("권한이 없습니다");
         }
 
         boardPS.update(reqDTO.getTitle(), reqDTO.getContent(), reqDTO.getIsPublic());
@@ -39,7 +40,7 @@ public class BoardService {
                 .orElseThrow(() -> new Exception404("자원을 찾을 수 없습니다"));
 
         if (!boardPS.getUser().getId().equals(sessionUserId)) {
-            throw new Exception403("권한이 없습니다");
+            throw new ExceptionApi403("권한이 없습니다");
         }
         boardRepository.deleteById(id);
     }
@@ -66,10 +67,10 @@ public class BoardService {
     @Transactional
     public BoardResponse.DetailDTO 글상세보기(Integer id, Integer userId) {
         Board boardPS = boardRepository.findByIdJoinUserAndReplies(id)
-                .orElseThrow(() -> new Exception404("자원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
 
         Love lovePS = loveRepository.findByUserIdAndBoardId(userId, id)
-                .orElseThrow(() -> new Exception404("자원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
         Long loveCount = loveRepository.findByBoardId(id);
 
         Integer loveId = lovePS.getId();
@@ -82,10 +83,10 @@ public class BoardService {
     // 규칙4 -> 화면에 보이는 데이터 + 반드시 PK 를 넣어야 한다
     public BoardResponse.DTO 글보기(int id, Integer sessionUserId) {
         Board boardPS = boardRepository.findById(id)
-                .orElseThrow(() -> new Exception404("자원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
 
         if (!boardPS.getUser().getId().equals(sessionUserId)) {
-            throw new Exception403("권한이 없습니다");
+            throw new ExceptionApi403("권한이 없습니다");
         }
 
         return new BoardResponse.DTO(boardPS);
