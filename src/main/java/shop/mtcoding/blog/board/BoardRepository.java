@@ -6,26 +6,35 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
 public class BoardRepository {
     private final EntityManager em;
 
-    public Board findByIdJoinUserAndReplies(Integer id) {
+    public Optional<Board> findByIdJoinUserAndReplies(Integer id) {
         Query query = em.createQuery("select b from Board b join fetch b.user left join fetch b.replies r left join fetch r.user where b.id = :id order by r.id desc", Board.class);
         query.setParameter("id", id);
-        return (Board) query.getSingleResult();
+        try {
+            return Optional.of((Board) query.getSingleResult());
+        } catch (Exception e) {
+            return Optional.ofNullable(null);
+        }
     }
 
-    public Board findByIdJoinUser(Integer id) {
+    public Optional<Board> findByIdJoinUser(Integer id) {
         Query query = em.createQuery("select b from Board b join fetch b.user where b.id = :id", Board.class);
         query.setParameter("id", id);
-        return (Board) query.getSingleResult();
+        try {
+            return Optional.of((Board) query.getSingleResult());
+        } catch (Exception e) {
+            return Optional.ofNullable(null);
+        }
     }
 
-    public Board findById(Integer id) {
-        return em.find(Board.class, id);
+    public Optional<Board> findById(Integer id) {
+        return Optional.ofNullable(em.find(Board.class, id));
     }
 
     // 그룹 함수 : Long 리턴
@@ -34,9 +43,11 @@ public class BoardRepository {
         String sql;
         if (!(keyword.isBlank()))
             sql = "select count(b) from Board b where b.isPublic = true and b.title like :keyword";
-        else sql = "select count(b) from Board b where b.isPublic = true";
+        else
+            sql = "select count(b) from Board b where b.isPublic = true";
         Query query = em.createQuery(sql, Long.class);
         if (!(keyword.isBlank())) query.setParameter("keyword", "%" + keyword + "%");
+
         return (Long) query.getSingleResult();
     }
 
@@ -46,10 +57,12 @@ public class BoardRepository {
         String sql;
         if (!(keyword.isBlank()))
             sql = "select count(b) from Board b where b.isPublic = true or b.user.id = :userId and b.title like :keyword";
-        else sql = "select count(b) from Board b where b.isPublic = true or b.user.id = :userId";
+        else
+            sql = "select count(b) from Board b where b.isPublic = true or b.user.id = :userId";
         Query query = em.createQuery(sql, Long.class);
         if (!(keyword.isBlank())) query.setParameter("keyword", "%" + keyword + "%");
         query.setParameter("userId", userId);
+
         return (Long) query.getSingleResult();
     }
 
