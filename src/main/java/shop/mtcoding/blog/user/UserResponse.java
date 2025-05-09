@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.user;
 
+import lombok.Builder;
 import lombok.Data;
 
 public class UserResponse {
@@ -18,6 +19,18 @@ public class UserResponse {
             this.username = user.getUsername();
             this.email = user.getEmail();
             this.createdAt = user.getCreatedAt().toString();
+        }
+    }
+
+    @Data
+    public static class TokenDTO {
+        private String accessToken; // jwt
+        private String refreshToken;
+
+        @Builder
+        public TokenDTO(String accessToken, String refreshToken) {
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
         }
     }
 
