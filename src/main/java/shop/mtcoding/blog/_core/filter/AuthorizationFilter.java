@@ -15,6 +15,7 @@ import shop.mtcoding.blog.user.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+// 인가 필터
 public class AuthorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
