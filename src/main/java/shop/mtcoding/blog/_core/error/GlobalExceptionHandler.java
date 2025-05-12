@@ -16,32 +16,28 @@ public class GlobalExceptionHandler {
     // ResponseEntity -> 실제 상태코드를 넘겨주기 위해 사용하는 객체 예외 처리를 해도 200 코드가 날라가니 이 객체를 사용해 각각 상태코드를 다르게 넣어준다
     @ExceptionHandler(ExceptionApi400.class)
     public ResponseEntity<?> exApi400(ExceptionApi400 e) {
-        Resp<?> resp = Resp.fail(400, e.getMessage());
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        return Resp.fail(HttpStatus.BAD_REQUEST, e.getMessage());
+
     }
 
     @ExceptionHandler(ExceptionApi401.class)
     public ResponseEntity<?> exApi401(ExceptionApi401 e) {
-        Resp<?> resp = Resp.fail(401, e.getMessage());
-        return new ResponseEntity<>(resp, HttpStatus.UNAUTHORIZED);
+        return Resp.fail(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(ExceptionApi403.class)
     public ResponseEntity<?> exApi403(ExceptionApi403 e) {
-        Resp<?> resp = Resp.fail(403, e.getMessage());
-        return new ResponseEntity<>(resp, HttpStatus.FORBIDDEN);
+        return Resp.fail(HttpStatus.FORBIDDEN, e.getMessage());
     }
 
     @ExceptionHandler(ExceptionApi404.class)
     public ResponseEntity<?> exApi404(ExceptionApi404 e) {
-        Resp<?> resp = Resp.fail(404, e.getMessage());
-        return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
+        return Resp.fail(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> exUnKnown(Exception e) {
         System.out.println("관리자님 보세요 : " + e.getMessage()); // 로그를 파일에 기록해서 나중에 봐야함
-        Resp<?> resp = Resp.fail(500, "관리자에게 문의하세요");
-        return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+        return Resp.fail(HttpStatus.INTERNAL_SERVER_ERROR, "관리자에게 문의하세요");
     }
 }

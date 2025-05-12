@@ -8,7 +8,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog._core.util.Resp;
 import shop.mtcoding.blog.user.User;
@@ -54,7 +53,7 @@ public class AuthorizationFilter implements Filter {
 
     private void exResponse(HttpServletResponse response, String msg) throws IOException {
         response.setContentType("application/json;charset=utf-8");
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(401);
         PrintWriter out = response.getWriter();
 
         Resp<?> resp = Resp.fail(401, msg);
