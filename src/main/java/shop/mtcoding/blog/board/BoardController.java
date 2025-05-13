@@ -25,7 +25,7 @@ public class BoardController {
         return Resp.ok(respDTO);
     }
 
-    @GetMapping("/s/api/board/{id}") // 글 수정용. 수정 페이지 만들때 사용할 데이터
+    @GetMapping("/s/api/board/{id}")
     public ResponseEntity<?> getBoardOne(@PathVariable("id") int id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         BoardResponse.DTO respDTO = boardService.글보기(id, sessionUser.getId());
