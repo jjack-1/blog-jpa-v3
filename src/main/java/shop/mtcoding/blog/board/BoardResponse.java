@@ -48,6 +48,7 @@ public class BoardResponse {
                     .toList();
             this.prev = current - 1;
             this.next = current + 1;
+            this.current = current;
             this.size = 3;
             this.totalCount = totalCount; // given
             this.totalPage = makeTotalPage(totalCount, size); // 2

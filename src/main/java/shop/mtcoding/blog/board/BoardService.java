@@ -67,12 +67,11 @@ public class BoardService {
     public BoardResponse.DetailDTO 글상세보기(Integer id, Integer userId) {
         Board boardPS = boardRepository.findByIdJoinUserAndReplies(id)
                 .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
-
         Love lovePS = loveRepository.findByUserIdAndBoardId(userId, id)
-                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
+                .orElse(null);
         Long loveCount = loveRepository.findByBoardId(id);
 
-        Integer loveId = lovePS.getId();
+        Integer loveId = lovePS == null ? null : lovePS.getId();
         Boolean isLoved = lovePS == null ? false : true;
 
         BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(boardPS, userId, isLoved, loveCount.intValue(), loveId);

@@ -22,14 +22,15 @@ public class UserService {
     // RestAPI 규칙 1 -> insert 는 그 행을 DTO 에 담아 돌려줘야 한다
     @Transactional
     public UserResponse.DTO 회원가입(UserRequest.JoinDTO reqDTO) {
-        try {
-            String encPassword = BCrypt.hashpw(reqDTO.getPassword(), BCrypt.gensalt());
-            reqDTO.setPassword(encPassword);
-            User userPS = userRepository.save(reqDTO.toEntity());
-            return new UserResponse.DTO(userPS);
-        } catch (Exception e) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
+
+        Optional<User> userOP = userRepository.findByUsername(reqDTO.getUsername());
+        if (userOP.isPresent()) throw new ExceptionApi400("이미 존재하는 username 입니다");
+
+        String encPassword = BCrypt.hashpw(reqDTO.getPassword(), BCrypt.gensalt());
+        reqDTO.setPassword(encPassword);
+
+        User userPS = userRepository.save(reqDTO.toEntity());
+        return new UserResponse.DTO(userPS);
 
     }
 
@@ -67,14 +68,14 @@ public class UserService {
         return dto;
     }
 
-    // TODO RestAPI 규칙 3 -> update 된 data 도 돌려줘야 한다
+    // TODO RestAPI 규칙 3 -> update 된 data 도 돌려줘야 한다. 변경이 된 데이터도 돌여줘야 한다
     @Transactional
-    public User 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
+    public UserResponse.DTO 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
 
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
 
         userPS.update(updateDTO.getPassword(), updateDTO.getEmail()); // 영속화된 객체의 상태변경
-        return userPS; // 리턴한 이유는 세션을 동기화해야해서!!
+        return new UserResponse.DTO(userPS); // 리턴한 이유는 세션을 동기화해야해서!!
     } // 더티체킹 -> 상태가 변경되면 update을 날려요!!
 }
