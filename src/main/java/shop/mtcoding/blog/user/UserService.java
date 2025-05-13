@@ -48,6 +48,7 @@ public class UserService {
         String accessToken = JwtUtil.create(userPS);
         String refreshToken = JwtUtil.createRefresh(userPS);
 
+        // TODO -> RestAPI 전환 끝나면 수업함
         // DB에 DevicePrint서명값(LoginDTO), IP(request), User-Agent(request), RefreshToken 을 같이 (별도의 Table)저장
         // refresh 구현하는 방법
 
