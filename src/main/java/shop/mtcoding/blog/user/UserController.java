@@ -47,8 +47,8 @@ public class UserController {
 
     // TODO: JWT 이후에
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO loginDTO, Errors errors) {
-        UserResponse.TokenDTO respDTO = userService.로그인(loginDTO);
+    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO reqDTO, Errors errors) {
+        UserResponse.TokenDTO respDTO = userService.로그인(reqDTO);
         return Resp.ok(respDTO);
     }
 

@@ -35,11 +35,11 @@ public class UserService {
     }
 
     // TODO -> A4용지에다가 id, username 적어, A4용지를 서명함, A4용지를 돌려주기
-    public UserResponse.TokenDTO 로그인(UserRequest.LoginDTO loginDTO) {
-        User userPS = userRepository.findByUsername(loginDTO.getUsername())
+    public UserResponse.TokenDTO 로그인(UserRequest.LoginDTO reqDTO) {
+        User userPS = userRepository.findByUsername(reqDTO.getUsername())
                 .orElseThrow(() -> new ExceptionApi401("유저네임 혹은 비밀번호가 틀렸습니다"));
 
-        Boolean isMatched = BCrypt.checkpw(loginDTO.getPassword(), userPS.getPassword());
+        Boolean isMatched = BCrypt.checkpw(reqDTO.getPassword(), userPS.getPassword());
 
         if (!isMatched) {
             throw new ExceptionApi401("유저네임 혹은 비밀번호가 틀렸습니다");
@@ -70,12 +70,12 @@ public class UserService {
 
     // TODO RestAPI 규칙 3 -> update 된 data 도 돌려줘야 한다. 변경이 된 데이터도 돌여줘야 한다
     @Transactional
-    public UserResponse.DTO 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
+    public UserResponse.DTO 회원정보수정(UserRequest.UpdateDTO reqDTO, Integer userId) {
 
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
 
-        userPS.update(updateDTO.getPassword(), updateDTO.getEmail()); // 영속화된 객체의 상태변경
+        userPS.update(reqDTO.getPassword(), reqDTO.getEmail()); // 영속화된 객체의 상태변경
         return new UserResponse.DTO(userPS); // 리턴한 이유는 세션을 동기화해야해서!!
     } // 더티체킹 -> 상태가 변경되면 update을 날려요!!
 }
