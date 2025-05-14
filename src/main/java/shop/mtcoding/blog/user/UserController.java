@@ -3,6 +3,7 @@ package shop.mtcoding.blog.user;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import shop.mtcoding.blog._core.util.Resp;
 import java.util.Map;
 
 
+@Slf4j
 // TODO -> return 미완성
 @RequiredArgsConstructor
 @RestController // json만 리턴!!
@@ -34,6 +36,11 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@Valid @RequestBody UserRequest.JoinDTO reqDTO, Errors errors) {
+        log.trace("트레이스");
+        log.debug("디버그");
+        log.info("인포");
+        log.warn("워닝");
+        log.error("에러");
         UserResponse.DTO respDTO = userService.회원가입(reqDTO);
         return Resp.ok(respDTO);
     }
