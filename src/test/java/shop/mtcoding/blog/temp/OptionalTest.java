@@ -42,8 +42,12 @@ public class OptionalTest {
     public void t2() {
         String name = null;
         Optional<String> opt = Optional.ofNullable(name);
-        String result = opt.orElseThrow(() -> new RuntimeException("값이 없습니다")); // 값이 있으면 넣고, 없으면 throw 한다
-        System.out.println(result);
+        try {
+            String result = opt.orElseThrow(() -> new RuntimeException("값이 없습니다")); // 값이 있으면 넣고, 없으면 throw 한다
+            System.out.println(result);
+        } catch (RuntimeException e) {
+            System.out.println("터져도 괜찮아");
+        }
     }
 
     @Test
