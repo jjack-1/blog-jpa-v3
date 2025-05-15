@@ -18,7 +18,7 @@ public class CorsFilter implements Filter {
         String origin = request.getHeader("Origin");
         log.debug("origin : " + origin);
 
-        response.setHeader("Access-Control-Allow-Origin", "");
+        response.setHeader("Access-Control-Allow-Origin", origin);
 //        response.setHeader("Access-Control-Expose-Headers", "Authorization"); // 이 헤더 응답을 자바스크립트로 접근 할 수 있도록 허용할지
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE, OPTIONS");
         response.setHeader("Access-Control-Max-Age", "3600");
