@@ -89,7 +89,7 @@ public class BoardControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void getBoardDetail_test() throws Exception {
+    public void get_board_detail_test() throws Exception {
         // given
         Integer id = 4;
 
@@ -160,7 +160,7 @@ public class BoardControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void getBoardOne_test() throws Exception {
+    public void get_board_one_test() throws Exception {
         // given
         Integer id = 1;
 

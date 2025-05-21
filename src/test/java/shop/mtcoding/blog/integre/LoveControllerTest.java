@@ -44,7 +44,7 @@ public class LoveControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void saveLove_test() throws Exception {
+    public void save_love_test() throws Exception {
         // given
         LoveRequest.SaveDTO reqDTO = new LoveRequest.SaveDTO();
         reqDTO.setBoardId(3);
@@ -74,7 +74,7 @@ public class LoveControllerTest extends MyRestDoc {
     }
 
     @Test
-    public void deleteLove_test() throws Exception {
+    public void delete_love_test() throws Exception {
         // given
         Integer id = 1;
 
